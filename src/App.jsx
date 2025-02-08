@@ -1,13 +1,41 @@
-import './App.css'
 import EmployeesTable from './Components/EmployeesTable'
+import Header from './Components/Header'
+import AddEmployeeComp from './Components/AddEmployeeComp'
+import UpdateEmployeeComp from './Components/UpdateEmployeeComp'
+import { Navigate, Route, Routes, Link } from 'react-router-dom'
 
 function App() {
 
   return (
     <>
-      <EmployeesTable/>
+      <Header/>
+      <div className='container flex max-w-screen-xl mx-auto px-5 py-8 gap-5'>
+        <div className='container w-8/12'>
+          <EmployeesTable/>
+        </div>
+        <div className='container w-4/12'>
+          <Routes>
+            <Route path='/' element={<AddButton/>}></Route>
+            <Route path='/add-employee' element={<AddEmployeeComp/>}></Route>
+            <Route path='/update-employee/:id' element={<UpdateEmployeeComp/>}></Route>
+            <Route path='/employees' element={<Navigate to="/"/>}></Route>
+          </Routes>
+        </div>
+      </div>
     </>
   )
 }
 
-export default App
+export default App;
+
+function AddButton() {
+  return(
+    <Link to='/add-employee'>
+      <button className='py-4 px-6 rounded-xl bg-cyan-700'>
+        <i className="fa-solid fa-plus mr-3 text-lg"></i>
+        Add Employee                
+      </button>
+    </Link>
+  );
+}
+
