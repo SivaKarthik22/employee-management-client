@@ -1,28 +1,18 @@
-import { useEffect, useState } from "react";
-import { fetchEmployeesDb } from "../Services/EmployeeServices";
+import { useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import { EmployeeDbContext } from "./EmployeeDbContext";
 
 function EmployeesTable(){
-    const [db, setDb] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [errorMsg, setErrorMsg] = useState(null);
+    const {db, dbLoading, dbErr, refreshDb} = useContext(EmployeeDbContext);
 
     useEffect(()=>{
-        fetchEmployeesDb()
-        .then(response => {
-            setDb(response.data);
-            setLoading(false);
-        })
-        .catch(err => {
-            setErrorMsg(err.message);
-            setLoading(false);
-        });
+        refreshDb();
     },[]);
 
     return(
         <div className=" inline-block container p-5 border-1 border-cyan-900 rounded-lg bg-cyan-950/20 h-auto">
-            {loading && <h3>Loading</h3>}
-            {errorMsg && <h3>Error loading data</h3>}
+            {dbLoading && <h3>Loading</h3>}
+            {dbErr && <h3>Error loading data</h3>}
             {db && (
                 <table className="container w-full rounded-md overflow-hidden">
                     <thead>

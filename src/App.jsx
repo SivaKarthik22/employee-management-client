@@ -3,11 +3,12 @@ import Header from './Components/Header'
 import AddEmployeeComp from './Components/AddEmployeeComp'
 import UpdateEmployeeComp from './Components/UpdateEmployeeComp'
 import { Navigate, Route, Routes, Link } from 'react-router-dom'
+import { EmployeeDbProvider } from './Components/EmployeeDbContext'
 
 function App() {
 
   return (
-    <>
+    <EmployeeDbProvider>
       <Header/>
       <div className='container flex max-w-screen-xl mx-auto px-5 py-8 gap-5'>
         <div className='container w-8/12'>
@@ -22,7 +23,7 @@ function App() {
           </Routes>
         </div>
       </div>
-    </>
+    </EmployeeDbProvider>
   )
 }
 

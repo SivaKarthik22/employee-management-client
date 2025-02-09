@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { createEmployeeInDb } from "../Services/EmployeeServices";
 import { useNavigate } from "react-router-dom";
+import { EmployeeDbContext } from "./EmployeeDbContext";
 
 function AddEmployeeComp() {
     const [inputValues, setInputValues] = useState({firstName:"", lastName:"", email:""});
     const [formValidity, setFormValidity] = useState(true);
+    const {refreshDb} = useContext(EmployeeDbContext);
     const navigator = useNavigate();
 
     function handleChange(event) {
@@ -31,6 +33,7 @@ function AddEmployeeComp() {
             createEmployeeInDb(inputValues)
             .then(response => {
                 console.log(response.data);
+                refreshDb();
                 navigator("/");
             })
             .catch(err =>{
