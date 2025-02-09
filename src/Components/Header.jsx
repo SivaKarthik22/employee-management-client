@@ -20,7 +20,7 @@ function SearchBar(){
         <div className="flex py-2 px-4 w-sm border-1 border-cyan-900 rounded-full bg-cyan-950/50 items-center justify-between gap-3">
             <input
                 className="flex-grow font-light outline-none"
-                placeholder="Seach by employee id, name or email"
+                placeholder="Seach by employee ID or name"
                 onChange={event => {
                     setInputValue(event.target.value);
                 }}
