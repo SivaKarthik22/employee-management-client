@@ -1,6 +1,6 @@
 import EmployeesTable from './Components/EmployeesTable'
 import Header from './Components/Header'
-import AddEmployeeComp from './Components/AddEmployeeComp'
+import AddOrUpdateComp from './Components/AddOrUpdateComp'
 import UpdateEmployeeComp from './Components/UpdateEmployeeComp'
 import { Navigate, Route, Routes, Link } from 'react-router-dom'
 import { EmployeeDbProvider } from './Components/EmployeeDbContext'
@@ -17,8 +17,8 @@ function App() {
         <div className='container w-4/12'>
           <Routes>
             <Route path='/' element={<AddButton/>}></Route>
-            <Route path='/add-employee' element={<AddEmployeeComp/>}></Route>
-            <Route path='/update-employee/:id' element={<UpdateEmployeeComp/>}></Route>
+            <Route path='/add-employee' element={<AddOrUpdateComp/>}></Route>
+            <Route path='/update-employee/:id' element={<AddOrUpdateComp/>}></Route>
             <Route path='/employees' element={<Navigate to="/"/>}></Route>
           </Routes>
         </div>

@@ -13,3 +13,11 @@ export function createEmployeeInDb(employeeObj){
 export function deleteEmployeeFromDb(id){
     return axios.delete(REST_API_BASE_URL + '/' + id);
 }
+
+export function fetchEmployeeById(id){
+    return axios.get(REST_API_BASE_URL + '/' + id);
+}
+
+export function updateEmployeeInDb(id, employeeObj){
+    return axios.put(REST_API_BASE_URL + '/' + id, employeeObj);
+}

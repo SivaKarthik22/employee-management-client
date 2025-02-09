@@ -1,13 +1,14 @@
 import { useState, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { createEmployeeInDb } from "../Services/EmployeeServices";
+import { Link, useParams } from "react-router-dom";
+import { createEmployeeInDb, fetchEmployeeById, updateEmployeeInDb } from "../Services/EmployeeServices";
 import { useNavigate } from "react-router-dom";
 import { EmployeeDbContext } from "./EmployeeDbContext";
 
-function AddEmployeeComp() {
+function AddOrUpdateComp() {
     const [inputValues, setInputValues] = useState({firstName:"", lastName:"", email:""});
     const [formValidity, setFormValidity] = useState(true);
     const [status, setStatus] = useState(null);
+    const {id} = useParams();
     const {refreshDb} = useContext(EmployeeDbContext);
     const navigator = useNavigate();
 
@@ -24,6 +25,22 @@ function AddEmployeeComp() {
             },2000);
         }
     },[status]);
+
+    useEffect(()=>{
+        if(id){
+            fetchEmployeeById(id)
+            .then((response)=>{
+                setInputValues(
+                    {
+                        firstName: response.data.firstName,
+                        lastName: response.data.lastName,
+                        email: response.data.email
+                    }
+                );
+            })
+            .catch(console.log);
+        }
+    },[]);
 
     function handleChange(event) {
         setInputValues({...inputValues, [event.target.id]: event.target.value});
@@ -44,8 +61,21 @@ function AddEmployeeComp() {
         event.preventDefault();
         if(!checkFormValidity())
             return;
+        
+        setStatus("loading");
+
+        if(id){
+            updateEmployeeInDb(id, inputValues)
+            .then(response => {
+                console.log(response.data);
+                setStatus("success");
+            })
+            .catch(err =>{
+                console.log(err);
+                setStatus("fail");
+            });
+        }
         else{
-            setStatus("loading");
             createEmployeeInDb(inputValues)
             .then(response => {
                 console.log(response.data);
@@ -62,7 +92,9 @@ function AddEmployeeComp() {
     return(
         <div className="container p-5 border-1 border-cyan-900 rounded-lg bg-cyan-950/20 relative overflow-hidden">
             <div className="flex justify-between items-center mb-6">
-                <p className="text-lg">New Employee</p>
+                <p className="text-lg">
+                    {id ? "Update Employee" : "New Employee"}
+                </p>
                 <Link to='/'>
                     <button>
                         <i className="fa-solid fa-xmark opacity-75 px-2 text-lg"></i>
@@ -70,6 +102,17 @@ function AddEmployeeComp() {
                 </Link>
             </div>
             <form className="flex flex-col p-2 ">
+                {id && (
+                    <>
+                        <label htmlFor="empId" className="mb-3"><p>Employee Id:</p></label>
+                        <input
+                            className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4 opacity-50"
+                            id="empId"
+                            value={id}
+                            disabled
+                        />
+                    </>
+                )}
                 <label htmlFor="firstName" className="mb-3 block flex justify-between items-center">
                     <p>Employee first name*</p>
                     {!formValidity && inputValues.firstName=="" && <p className="text-sm text-cyan-500">This information is required</p>}
@@ -115,7 +158,8 @@ function AddEmployeeComp() {
                     <button
                         className="py-2 px-5 rounded-lg bg-cyan-700"
                         onClick={handleSubmit}
-                    >Submit
+                    >
+                        {id ? "Update" : "Submit"}
                     </button>
                 </div>
             </form>
@@ -123,43 +167,49 @@ function AddEmployeeComp() {
                 fields with * are mandatory
             </p>
 
-            {status == "loading" && <AddEmployeeLoading/>}
-            {status == "success" && <AddEmployeeSuccess/>}
-            {status == "fail" && <AddEmployeeFailed/>}
+            {status == "loading" && <EmployeeLoading id={id} />}
+            {status == "success" && <EmployeeSuccess id={id}/>}
+            {status == "fail" && <EmployeeFailed id={id}/>}
         </div>
     );
 }
 
-export default AddEmployeeComp;
+export default AddOrUpdateComp;
 
-function AddEmployeeSuccess(){
+function EmployeeSuccess({id}){
     return(
         <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
             <p className="text-6xl">
                 <i className="fa-solid fa-check"></i>
             </p>
-            <p className="text-xl">New Employee added</p>
+            <p className="text-xl">
+                {id ? "Employee updated" : "New Employee added"}
+            </p>
         </div>
     );
 }
-function AddEmployeeFailed(){
+function EmployeeFailed({id}){
     return(
         <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
-            <p className="text-xl">Failed to create new Employee</p>
+            <p className="text-xl">
+            {id ? "Failed to update Employee" : "Failed to create new Employee"}
+            </p>
             <p className="text-6xl">
                 <i className="fa-solid fa-xmark"></i>
             </p>
-            <p className="text-xl">Please try again</p>
+            <p className="text-xl">Please try again later</p>
         </div>
     );
 }
-function AddEmployeeLoading(){
+function EmployeeLoading({id}){
     return(
         <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
             <p className="text-6xl">
                 <i className="fa-solid fa-spinner"></i>
             </p>
-            <p className="text-xl">Creating Employee...</p>
+            <p className="text-xl">
+            {id ? "Updating Employee..." : "Creating Employee..."}
+            </p>
         </div>
     );
 }
