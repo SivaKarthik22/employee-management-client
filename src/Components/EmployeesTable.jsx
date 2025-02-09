@@ -1,71 +1,61 @@
 import { useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { EmployeeDbContext } from "./EmployeeDbContext";
-import { deleteEmployeeFromDb } from "../Services/EmployeeServices";
 
 function EmployeesTable(){
     const {db, dbLoading, dbErr, refreshDb} = useContext(EmployeeDbContext);
+    const navigator = useNavigate();
 
     useEffect(()=>{
         refreshDb();
     },[]);
 
-    function handleDelete(id){
-        deleteEmployeeFromDb(id)
-        .then(()=>{
-            refreshDb();
-        })
-        .catch(console.log);
-    }
-
     return(
         <div className="container p-5 border-1 border-cyan-900 rounded-lg bg-cyan-950/20 h-auto">
-            {dbLoading && <h3>Loading</h3>}
-            {dbErr && <h3>Error loading data</h3>}
+            {dbLoading && (
+                <h3 className="text-center opacity-75">
+                    <i className="fa-solid fa-spinner text-2xl mr-3"></i>
+                    <span className="text-xl">Loading Employees data</span>
+                </h3>
+            )}
+            {dbErr && (
+                <h3 className="text-center opacity-75">
+                    <i className="fa-solid fa-triangle-exclamation text-xl mr-3"></i>
+                    <span className="text-xl">Error loading Employees data</span>
+                </h3>
+            )}
             {db && (
                 <table className="container rounded-md overflow-hidden">
                     <thead>
                         <tr className="border-b-2 border-cyan-900 bg-cyan-950/40">
-                            <th className="p-4 text-center">
+                            <th className="py-4 px-3 text-center">
                                 Emp. Id
                             </th>
-                            <th className="p-4 text-left">
+                            <th className="py-4 px-3 text-left">
                                 Employee Name
                             </th>
-                            <th className="p-4 text-left">
+                            <th className="py-4 px-3 text-left">
                                 E-mail
-                            </th>
-                            <th className="p-4 text-center">
-                                Update
-                            </th>
-                            <th className="p-4 text-center">
-                                Delete
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         {db.map(employeeObj => (
-                            <tr key={employeeObj.id} className="border-t-1 border-cyan-900/50">
-                                <td className="p-3 text-center w-[12%]">
+                            <tr 
+                                key={employeeObj.id}
+                                className="border-t-1 border-cyan-900/50 cursor-pointer hover:bg-cyan-700/25"
+                                onClick={()=>{
+                                    navigator(`/employees/${employeeObj.id}`);
+                                }}
+                            >
+                                <td className="p-3 text-center">
                                     {employeeObj.id}
                                 </td>
-                                <td className="p-3 w-[30%]">
+                                <td className="p-3">
                                     {`${employeeObj.firstName} ${employeeObj.lastName}`}
                                 </td>
-                                <td className="p-3 w-[33%] font-light">
+                                <td className="p-3 font-light">
                                     {employeeObj.email}
-                                </td>
-                                <td className="p-3 text-center w-[12%]">
-                                    <Link to={`/update-employee/${employeeObj.id}`}>
-                                        <button className="fa-solid fa-pen-to-square opacity-75"></button>
-                                    </Link>
-                                </td>
-                                <td className="p-3 text-center w-[12%]">
-                                    <button
-                                        className="fa-solid fa-trash opacity-75"
-                                        onClick={()=>{handleDelete(employeeObj.id)}}
-                                    >
-                                    </button>
                                 </td>
                             </tr>
                         ))}

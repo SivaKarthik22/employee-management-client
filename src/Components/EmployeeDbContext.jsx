@@ -9,6 +9,7 @@ export function EmployeeDbProvider({children}){
     const [dbErr, setDbErr] = useState(null);
     function refreshDb(){
         setDbLoading(true);
+        setDbErr(false);
         fetchEmployeesDb()
         .then(response => {
             setDb(response.data);

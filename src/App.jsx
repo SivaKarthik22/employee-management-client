@@ -1,9 +1,9 @@
 import EmployeesTable from './Components/EmployeesTable'
 import Header from './Components/Header'
 import AddOrUpdateComp from './Components/AddOrUpdateComp'
-import UpdateEmployeeComp from './Components/UpdateEmployeeComp'
 import { Navigate, Route, Routes, Link } from 'react-router-dom'
 import { EmployeeDbProvider } from './Components/EmployeeDbContext'
+import EmployeeDetails from './Components/EmployeeDetails'
 
 function App() {
 
@@ -20,6 +20,7 @@ function App() {
             <Route path='/add-employee' element={<AddOrUpdateComp/>}></Route>
             <Route path='/update-employee/:id' element={<AddOrUpdateComp/>}></Route>
             <Route path='/employees' element={<Navigate to="/"/>}></Route>
+            <Route path='/employees/:id' element={<EmployeeDetails/>}></Route>
           </Routes>
         </div>
       </div>

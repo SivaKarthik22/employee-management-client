@@ -40,7 +40,7 @@ function AddOrUpdateComp() {
             })
             .catch(console.log);
         }
-    },[]);
+    },[id]);
 
     function handleChange(event) {
         setInputValues({...inputValues, [event.target.id]: event.target.value});
@@ -182,7 +182,7 @@ function EmployeeSuccess({id}){
             <p className="text-6xl">
                 <i className="fa-solid fa-check"></i>
             </p>
-            <p className="text-xl">
+            <p className="text-lg">
                 {id ? "Employee updated" : "New Employee added"}
             </p>
         </div>
@@ -191,13 +191,13 @@ function EmployeeSuccess({id}){
 function EmployeeFailed({id}){
     return(
         <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
-            <p className="text-xl">
-            {id ? "Failed to update Employee" : "Failed to create new Employee"}
+            <p className="text-lg">
+                {id ? "Failed to update Employee" : "Failed to create new Employee"}
             </p>
             <p className="text-6xl">
                 <i className="fa-solid fa-xmark"></i>
             </p>
-            <p className="text-xl">Please try again later</p>
+            <p className="text-lg">Please try again later</p>
         </div>
     );
 }
@@ -207,8 +207,8 @@ function EmployeeLoading({id}){
             <p className="text-6xl">
                 <i className="fa-solid fa-spinner"></i>
             </p>
-            <p className="text-xl">
-            {id ? "Updating Employee..." : "Creating Employee..."}
+            <p className="text-lg">
+                {id ? "Updating Employee..." : "Creating Employee..."}
             </p>
         </div>
     );
