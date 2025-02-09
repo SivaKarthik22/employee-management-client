@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createEmployeeInDb } from "../Services/EmployeeServices";
 import { useNavigate } from "react-router-dom";
@@ -7,8 +7,23 @@ import { EmployeeDbContext } from "./EmployeeDbContext";
 function AddEmployeeComp() {
     const [inputValues, setInputValues] = useState({firstName:"", lastName:"", email:""});
     const [formValidity, setFormValidity] = useState(true);
+    const [status, setStatus] = useState(null);
     const {refreshDb} = useContext(EmployeeDbContext);
     const navigator = useNavigate();
+
+    useEffect(()=>{
+        if(status == "success"){
+            setTimeout(()=>{
+                navigator('/');
+                refreshDb();
+            },500);
+        }
+        else if(status == "fail"){
+            setTimeout(()=>{
+                setStatus(null);
+            },2000);
+        }
+    },[status]);
 
     function handleChange(event) {
         setInputValues({...inputValues, [event.target.id]: event.target.value});
@@ -30,21 +45,22 @@ function AddEmployeeComp() {
         if(!checkFormValidity())
             return;
         else{
+            setStatus("loading");
             createEmployeeInDb(inputValues)
             .then(response => {
                 console.log(response.data);
-                refreshDb();
-                navigator("/");
+                setStatus("success");
             })
             .catch(err =>{
                 console.log(err);
                 setInputValues({firstName:"", lastName:"", email:""});
+                setStatus("fail");
             });
         }
     }
 
     return(
-        <div className="container p-5 border-1 border-cyan-900 rounded-lg bg-cyan-950/20">
+        <div className="container p-5 border-1 border-cyan-900 rounded-lg bg-cyan-950/20 relative overflow-hidden">
             <div className="flex justify-between items-center mb-6">
                 <p className="text-lg">New Employee</p>
                 <Link to='/'>
@@ -106,8 +122,44 @@ function AddEmployeeComp() {
             <p className="text-sm italic mt-2">
                 fields with * are mandatory
             </p>
+
+            {status == "loading" && <AddEmployeeLoading/>}
+            {status == "success" && <AddEmployeeSuccess/>}
+            {status == "fail" && <AddEmployeeFailed/>}
         </div>
     );
 }
 
 export default AddEmployeeComp;
+
+function AddEmployeeSuccess(){
+    return(
+        <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
+            <p className="text-6xl">
+                <i className="fa-solid fa-check"></i>
+            </p>
+            <p className="text-xl">New Employee added</p>
+        </div>
+    );
+}
+function AddEmployeeFailed(){
+    return(
+        <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
+            <p className="text-xl">Failed to create new Employee</p>
+            <p className="text-6xl">
+                <i className="fa-solid fa-xmark"></i>
+            </p>
+            <p className="text-xl">Please try again</p>
+        </div>
+    );
+}
+function AddEmployeeLoading(){
+    return(
+        <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
+            <p className="text-6xl">
+                <i className="fa-solid fa-spinner"></i>
+            </p>
+            <p className="text-xl">Creating Employee...</p>
+        </div>
+    );
+}

@@ -9,3 +9,7 @@ export function fetchEmployeesDb(){
 export function createEmployeeInDb(employeeObj){
     return axios.post(REST_API_BASE_URL, employeeObj);
 }
+
+export function deleteEmployeeFromDb(id){
+    return axios.delete(REST_API_BASE_URL + '/' + id);
+}
