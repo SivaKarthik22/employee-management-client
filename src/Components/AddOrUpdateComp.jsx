@@ -5,7 +5,19 @@ import { useNavigate } from "react-router-dom";
 import { EmployeeDbContext } from "./EmployeeDbContext";
 
 function AddOrUpdateComp() {
-    const [inputValues, setInputValues] = useState({firstName:"", lastName:"", email:""});
+    const requiredFields = ["firstName","lastName","email","phone"];
+    const fields = ["firstName","lastName","email","phone","jobTitle","department","startDate","location","salary"];
+    function createInputValuesObj(existingValuesObj){
+        const obj = {};
+        for(let field of fields){
+            obj[field] = (existingValuesObj ? existingValuesObj[field] : "");
+        }
+        //console.log(obj);
+        return obj;
+        /*return {firstName:"",lastName:"",email:"",phone:"",jobTitle:"",department:"",startDate:"",location:"",salary:""};*/
+    }
+
+    const [inputValues, setInputValues] = useState(createInputValuesObj());
     const [formValidity, setFormValidity] = useState(true);
     const [status, setStatus] = useState(null);
     const {id} = useParams();
@@ -30,13 +42,8 @@ function AddOrUpdateComp() {
         if(id){
             fetchEmployeeById(id)
             .then((response)=>{
-                setInputValues(
-                    {
-                        firstName: response.data.firstName,
-                        lastName: response.data.lastName,
-                        email: response.data.email
-                    }
-                );
+                console.log(response.data);
+                setInputValues( createInputValuesObj(response.data) );
             })
             .catch(console.log);
         }
@@ -44,17 +51,18 @@ function AddOrUpdateComp() {
 
     function handleChange(event) {
         setInputValues({...inputValues, [event.target.id]: event.target.value});
+        console.log(inputValues);
     }
 
     function checkFormValidity(){
-        if(inputValues.firstName == "" || inputValues.lastName == "" || inputValues.email == ""){
-            setFormValidity(false);
-            return false;
+        for(let field of requiredFields){
+            if(inputValues[field] == ""){
+                setFormValidity(false);
+                return false;
+            }
         }
-        else{
-            setFormValidity(true);
-            return true;
-        }
+        setFormValidity(true);
+        return true;
     }
 
     function handleSubmit(event){
@@ -83,7 +91,7 @@ function AddOrUpdateComp() {
             })
             .catch(err =>{
                 console.log(err);
-                setInputValues({firstName:"", lastName:"", email:""});
+                setInputValues(createInputValuesObj());
                 setStatus("fail");
             });
         }
@@ -104,112 +112,116 @@ function AddOrUpdateComp() {
             <form className="flex flex-col p-2 ">
                 {id && (
                     <>
-                        <label htmlFor="empId" className="mb-3"><p>Employee Id:</p></label>
+                        <label htmlFor="id" className="mb-3"><p>Employee Id:</p></label>
                         <input
                             className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4 opacity-50"
-                            id="empId"
+                            id="id"
                             value={id}
                             disabled
                         />
                     </>
                 )}
-                <label htmlFor="firstName" className="mb-3 block flex justify-between items-center">
-                    <p>Employee first name*</p>
-                    {!formValidity && inputValues.firstName=="" && <p className="text-sm text-cyan-500">This information is required</p>}
-                </label>
-                <input
-                    className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4"
-                    id="firstName"
-                    type="text"
-                    required
-                    value={inputValues.firstName}
-                    onChange={handleChange}
-                />
-                <label htmlFor="lastName" className="mb-3 block flex justify-between items-center">
-                    <p>Employee last name*</p>
-                    {!formValidity && inputValues.lastName=="" && <p className="text-sm text-cyan-500">This information is required</p>}
-                </label>
-                <input 
-                    className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4"
-                    id="lastName"
-                    type="text"
-                    required
-                    value={inputValues.lastName}
-                    onChange={handleChange}
-                />
-                <label htmlFor="email" className="mb-3 block flex justify-between items-center">
-                    <p>Employee e-mail*</p>
-                    {!formValidity && inputValues.email=="" && <p className="text-sm text-cyan-500">This information is required</p>}
-                </label>
-                <input 
-                    className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4"
-                    id="email"
-                    type="email"
-                    required
-                    value={inputValues.email}
-                    onChange={handleChange}
-                />
+
+                <FormField id="firstName" type="text" label="Employee First Name*" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="lastName" type="text" label="Employee Last Name*" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="email" type="email" label="Official e-mail*" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="phone" type="number" label="Phone No.*" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="jobTitle" type="text" label="Job Title" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="department" type="text" label="Department" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="location" type="text" label="Work Location" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="startDate" type="date" label="Start Date" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+                <FormField id="salary" type="number" label="Annual Salary" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
+                </FormField>
+
                 <div className="flex justify-end gap-3 pt-3">
                     <Link to='/'>
-                        <button className="py-2 px-5 rounded-lg border-2 border-cyan-700 text-cyan-500">
+                        <button className="py-2 px-5 rounded-lg border-2 border-cyan-700 text-cyan-500 hover:bg-cyan-700/25 hover:text-cyan-400">
                             Cancel
                         </button>
                     </Link>
                     <button
-                        className="py-2 px-5 rounded-lg bg-cyan-700"
+                        className="py-2 px-5 rounded-lg bg-cyan-700 hover:bg-cyan-600"
                         onClick={handleSubmit}
                     >
                         {id ? "Update" : "Submit"}
                     </button>
                 </div>
             </form>
+
             <p className="text-sm italic mt-2">
                 fields with * are mandatory
             </p>
 
-            {status == "loading" && <EmployeeLoading id={id} />}
-            {status == "success" && <EmployeeSuccess id={id}/>}
-            {status == "fail" && <EmployeeFailed id={id}/>}
+            {status && <StatusDisplay id={id} status={status}/>}
         </div>
     );
 }
 
 export default AddOrUpdateComp;
 
-function EmployeeSuccess({id}){
+function StatusDisplay({id, status}){
     return(
         <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
-            <p className="text-6xl">
-                <i className="fa-solid fa-check"></i>
-            </p>
-            <p className="text-lg">
-                {id ? "Employee updated" : "New Employee added"}
-            </p>
+            {status == "loading" && (<>
+                <p className="text-6xl">
+                    <i className="fa-solid fa-spinner"></i>
+                </p>
+                <p className="text-lg">
+                    {id ? "Updating Employee..." : "Creating Employee..."}
+                </p>
+            </>)}
+            {status == "success" && (<>
+                <p className="text-6xl">
+                    <i className="fa-solid fa-check"></i>
+                </p>
+                <p className="text-lg">
+                    {id ? "Employee updated" : "New Employee added"}
+                </p>
+            </>)}
+            {status == "fail" && (<>
+                <p className="text-lg">
+                    {id ? "Failed to update Employee" : "Failed to create new Employee"}
+                </p>
+                <p className="text-6xl">
+                    <i className="fa-solid fa-xmark"></i>
+                </p>
+                <p className="text-lg">Please try again later</p>
+            </>)}
         </div>
     );
 }
-function EmployeeFailed({id}){
+
+function FormField({id, type, label, valueState, handleChange, formValidity, requiredFields}){
     return(
-        <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
-            <p className="text-lg">
-                {id ? "Failed to update Employee" : "Failed to create new Employee"}
-            </p>
-            <p className="text-6xl">
-                <i className="fa-solid fa-xmark"></i>
-            </p>
-            <p className="text-lg">Please try again later</p>
-        </div>
-    );
-}
-function EmployeeLoading({id}){
-    return(
-        <div className="w-full h-full absolute top-0 left-0 bg-cyan-800 flex justify-center items-center flex-col gap-5">
-            <p className="text-6xl">
-                <i className="fa-solid fa-spinner"></i>
-            </p>
-            <p className="text-lg">
-                {id ? "Updating Employee..." : "Creating Employee..."}
-            </p>
-        </div>
+        <>
+            <label htmlFor={id} className="mb-3 block flex justify-between items-end">
+                <p>{label}</p>
+                {requiredFields.includes(id) && !formValidity && valueState=="" && <p className="text-sm text-cyan-500">This information is required!</p>}
+            </label>
+            <input 
+                className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4"
+                id={id}
+                type={type}
+                value={valueState[id]}
+                onChange={handleChange}
+            />
+        </>
     );
 }

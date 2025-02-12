@@ -45,6 +45,7 @@ function EmployeeDetails(){
             </div>
             
             <table className="w-full">
+                <tbody>
                 <tr>
                     <td className="p-2">Employee Id: </td>
                     <td className="p-2">{employeeData.id}</td>
@@ -85,6 +86,7 @@ function EmployeeDetails(){
                     <td className="p-2">Salary: </td>
                     <td className="p-2">{employeeData.salary}</td>
                 </tr>
+                </tbody>
             </table>
                 
             <div className="flex gap-3 mt-10">

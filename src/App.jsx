@@ -33,7 +33,7 @@ export default App;
 function AddButton() {
   return(
     <Link to='/add-employee'>
-      <button className='py-4 px-6 rounded-xl bg-cyan-700'>
+      <button className='py-4 px-6 rounded-xl bg-cyan-700 hover:bg-cyan-600'>
         <i className="fa-solid fa-plus mr-3 text-lg"></i>
         Add Employee                
       </button>

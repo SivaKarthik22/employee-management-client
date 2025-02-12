@@ -46,7 +46,7 @@ function EmployeesTable(){
                         {db.map(employeeObj => (
                             <tr 
                                 key={employeeObj.id}
-                                className="border-t-1 border-cyan-900/50 cursor-pointer hover:bg-cyan-700/25"
+                                className="border-t-1 border-cyan-900/50 cursor-pointer hover:bg-cyan-700/25 active:bg-cyan-700/50"
                                 onClick={()=>{
                                     navigator(`/employees/${employeeObj.id}`);
                                 }}
