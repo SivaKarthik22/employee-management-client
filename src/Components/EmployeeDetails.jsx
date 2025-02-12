@@ -61,6 +61,30 @@ function EmployeeDetails(){
                     <td className="p-2">Email: </td>
                     <td className="p-2">{employeeData.email}</td>
                 </tr>
+                <tr>
+                    <td className="p-2">Phone no.: </td>
+                    <td className="p-2">{employeeData.phone}</td>
+                </tr>
+                <tr>
+                    <td className="p-2">Title</td>
+                    <td className="p-2">{employeeData.jobTitle}</td>
+                </tr>
+                <tr>
+                    <td className="p-2">Department: </td>
+                    <td className="p-2">{employeeData.department}</td>
+                </tr>
+                <tr>
+                    <td className="p-2">Location: </td>
+                    <td className="p-2">{employeeData.location}</td>
+                </tr>
+                <tr>
+                    <td className="p-2">Start Date: </td>
+                    <td className="p-2">{employeeData.startDate}</td>
+                </tr>
+                <tr>
+                    <td className="p-2">Salary: </td>
+                    <td className="p-2">{employeeData.salary}</td>
+                </tr>
             </table>
                 
             <div className="flex gap-3 mt-10">

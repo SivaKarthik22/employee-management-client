@@ -35,7 +35,10 @@ function EmployeesTable(){
                                 Employee Name
                             </th>
                             <th className="py-4 px-3 text-left">
-                                E-mail
+                                Title
+                            </th>
+                            <th className="py-4 px-3 text-left">
+                                Department
                             </th>
                         </tr>
                     </thead>
@@ -55,7 +58,10 @@ function EmployeesTable(){
                                     {`${employeeObj.firstName} ${employeeObj.lastName}`}
                                 </td>
                                 <td className="p-3 font-light">
-                                    {employeeObj.email}
+                                    {employeeObj.jobTitle}
+                                </td>
+                                <td className="p-3 font-light">
+                                    {employeeObj.department}
                                 </td>
                             </tr>
                         ))}
