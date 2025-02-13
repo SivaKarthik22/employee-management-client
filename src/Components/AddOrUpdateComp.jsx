@@ -12,7 +12,6 @@ function AddOrUpdateComp() {
         for(let field of fields){
             obj[field] = (existingValuesObj ? existingValuesObj[field] : "");
         }
-        //console.log(obj);
         return obj;
         /*return {firstName:"",lastName:"",email:"",phone:"",jobTitle:"",department:"",startDate:"",location:"",salary:""};*/
     }
@@ -51,7 +50,6 @@ function AddOrUpdateComp() {
 
     function handleChange(event) {
         setInputValues({...inputValues, [event.target.id]: event.target.value});
-        console.log(inputValues);
     }
 
     function checkFormValidity(){
@@ -75,7 +73,7 @@ function AddOrUpdateComp() {
         if(id){
             updateEmployeeInDb(id, inputValues)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 setStatus("success");
             })
             .catch(err =>{
