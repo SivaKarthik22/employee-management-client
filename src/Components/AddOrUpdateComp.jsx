@@ -13,7 +13,7 @@ function AddOrUpdateComp() {
             obj[field] = (existingValuesObj ? existingValuesObj[field] : "");
         }
         return obj;
-        /*return {firstName:"",lastName:"",email:"",phone:"",jobTitle:"",department:"",startDate:"",location:"",salary:""};*/
+        //return {firstName:"",lastName:"",email:"",phone:"",jobTitle:"",department:"",startDate:"",location:"",salary:""};
     }
 
     const [inputValues, setInputValues] = useState(createInputValuesObj());
@@ -73,7 +73,7 @@ function AddOrUpdateComp() {
         if(id){
             updateEmployeeInDb(id, inputValues)
             .then(response => {
-                //console.log(response.data);
+                console.log(response.data);
                 setStatus("success");
             })
             .catch(err =>{
@@ -135,12 +135,14 @@ function AddOrUpdateComp() {
                 <FormField id="jobTitle" type="text" label="Job Title" valueState={inputValues}
                     handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
                 </FormField>
-                <FormField id="department" type="text" label="Department" valueState={inputValues}
-                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
-                </FormField>
-                <FormField id="location" type="text" label="Work Location" valueState={inputValues}
-                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
-                </FormField>
+                <DropDown id="department" options={["3D Studio","Tech Art","Platform","Digital Marketing","HR","Finance","Sales"]}
+                    label="Department" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>
+                </DropDown>
+                <DropDown id="location" options={["Coimbatore","Chennai","Bangalore","Delhi"]}
+                    label="Work Location" valueState={inputValues}
+                    handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>
+                </DropDown>
                 <FormField id="startDate" type="date" label="Start Date" valueState={inputValues}
                     handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
                 </FormField>
@@ -211,7 +213,7 @@ function FormField({id, type, label, valueState, handleChange, formValidity, req
         <>
             <label htmlFor={id} className="mb-3 block flex justify-between items-end">
                 <p>{label}</p>
-                {requiredFields.includes(id) && !formValidity && valueState=="" && <p className="text-sm text-cyan-500">This information is required!</p>}
+                {requiredFields.includes(id) && !formValidity && valueState[id]=="" && <p className="text-sm text-cyan-500">This information is required!</p>}
             </label>
             <input 
                 className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4"
@@ -220,6 +222,40 @@ function FormField({id, type, label, valueState, handleChange, formValidity, req
                 value={valueState[id]}
                 onChange={handleChange}
             />
+        </>
+    );
+}
+function DropDown({id, options, label, valueState, handleChange, formValidity, requiredFields}){
+    return(
+        <>
+            <label htmlFor={id} className="mb-3 block flex justify-between items-end">
+                <p>{label}</p>
+                {requiredFields.includes(id) && !formValidity && valueState[id]=="" && <p className="text-sm text-cyan-500">This information is required!</p>}
+            </label>
+            <select
+                className="py-2 px-3 border-1 border-cyan-900 rounded-md bg-cyan-950/50 mb-4"
+                id={id}
+                onChange={handleChange}
+                defaultValue={valueState[id]}
+            >
+                <option value="" disabled hidden>
+                    Select {label}
+                </option>
+                {options.map((option,index) => {
+                    if(option == valueState[id]){
+                        return (
+                            <option key={index} value={option} selected>
+                                {option}
+                            </option>
+                        );
+                    } 
+                    return (
+                        <option key={index} value={option} >
+                            {option}
+                        </option>
+                    );
+                })}
+            </select>
         </>
     );
 }

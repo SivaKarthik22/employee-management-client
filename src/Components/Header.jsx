@@ -4,7 +4,14 @@ function Header() {
     return(
         <header className="border-b-1 border-cyan-900">
             <div className="container p-5 max-w-screen-xl mx-auto flex justify-between items-center">
-                <p className="text-lg">Employee Management System (EMS)</p>
+                <p>
+                    <span className="text-lg text-cyan-500">
+                        ArtTech Studio
+                    </span>
+                    <span className="text-lg pl-2">
+                        Employee Mangement
+                    </span>
+                </p>
                 <SearchBar/>
             </div>
         </header>
