@@ -29,7 +29,7 @@ function EmployeesTable(){
                     <thead>
                         <tr className="border-b-2 border-cyan-900 bg-cyan-950/40">
                             <th className="py-4 px-3 text-center">
-                                Emp. Id
+                                Emp. ID
                             </th>
                             <th className="py-4 px-3 text-left">
                                 Employee Name

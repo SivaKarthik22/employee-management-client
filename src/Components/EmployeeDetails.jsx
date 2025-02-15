@@ -47,7 +47,7 @@ function EmployeeDetails(){
             <table className="w-full">
                 <tbody>
                 <tr>
-                    <td className="p-2">Employee Id: </td>
+                    <td className="p-2">Employee ID: </td>
                     <td className="p-2">{employeeData.id}</td>
                 </tr>
                 <tr>
