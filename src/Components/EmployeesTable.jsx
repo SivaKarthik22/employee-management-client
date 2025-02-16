@@ -3,12 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { EmployeeDbContext } from "./EmployeeDbContext";
 
 function EmployeesTable(){
-    const {db, dbLoading, dbErr, refreshDb} = useContext(EmployeeDbContext);
+    const {db, dbLoading, dbErr, refreshDb, mode, inputValues} = useContext(EmployeeDbContext);
     const navigator = useNavigate();
 
     useEffect(()=>{
         refreshDb();
-    },[]);
+    },[mode, inputValues]);
 
     return(
         <div className="container p-5 border-1 border-cyan-900 rounded-lg bg-cyan-950/20 h-auto">
@@ -18,10 +18,10 @@ function EmployeesTable(){
                     <span className="text-xl">Loading Employees data</span>
                 </h3>
             )}
-            {dbErr && (
+            {dbErr != "" && (
                 <h3 className="text-center opacity-75">
                     <i className="fa-solid fa-triangle-exclamation text-xl mr-3"></i>
-                    <span className="text-xl">Error loading Employees data</span>
+                    <span className="text-xl">{dbErr}</span>
                 </h3>
             )}
             {db && (

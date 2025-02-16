@@ -2,7 +2,7 @@ import axios from "axios";
 
 const REST_API_BASE_URL = "http://localhost:8080/api/employees";
 
-export function fetchEmployeesDb(){
+export function fetchAllEmployeesFromDb(){
     return axios.get(REST_API_BASE_URL);
 }
 
@@ -20,4 +20,22 @@ export function fetchEmployeeById(id){
 
 export function updateEmployeeInDb(id, employeeObj){
     return axios.put(REST_API_BASE_URL + '/' + id, employeeObj);
+}
+
+export function fetchEmployeeByFilter(filterObj){
+    let queryUrl = REST_API_BASE_URL + '/search?';
+    
+    queryUrl += `name=${filterObj.filter.trim()}&`;
+    
+    if(filterObj.location != "")
+        queryUrl += `location=${filterObj.location}&`;
+    else
+        queryUrl += `location=Coimbatore,Chennai,Bangalore,Delhi,Hyderabad&`;
+    
+    if(filterObj.department != "")
+        queryUrl += `department=${filterObj.department}`;
+    else
+        queryUrl += `department=3D%20Studio,Tech%20Art,Platform,Digital%20Marketing,HR,Finance,Sales`;
+
+    return axios.get(queryUrl);
 }

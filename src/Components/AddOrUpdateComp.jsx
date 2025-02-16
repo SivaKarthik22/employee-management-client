@@ -20,7 +20,7 @@ function AddOrUpdateComp() {
     const [formValidity, setFormValidity] = useState(true);
     const [status, setStatus] = useState(null);
     const {id} = useParams();
-    const {refreshDb} = useContext(EmployeeDbContext);
+    const {refreshDb, locations, departments} = useContext(EmployeeDbContext);
     const navigator = useNavigate();
 
     useEffect(()=>{
@@ -135,11 +135,11 @@ function AddOrUpdateComp() {
                 <FormField id="jobTitle" type="text" label="Job Title" valueState={inputValues}
                     handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>    
                 </FormField>
-                <DropDown id="department" options={["3D Studio","Tech Art","Platform","Digital Marketing","HR","Finance","Sales"]}
+                <DropDown id="department" options={departments}
                     label="Department" valueState={inputValues}
                     handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>
                 </DropDown>
-                <DropDown id="location" options={["Coimbatore","Chennai","Bangalore","Delhi"]}
+                <DropDown id="location" options={locations}
                     label="Work Location" valueState={inputValues}
                     handleChange={handleChange} formValidity={formValidity} requiredFields={requiredFields}>
                 </DropDown>
