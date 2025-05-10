@@ -3,11 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { EmployeeDbContext } from "./EmployeeDbContext";
 
 function EmployeesTable(){
-    const {db, dbLoading, dbErr, refreshDb, mode, inputValues} = useContext(EmployeeDbContext);
+    const {tableData, refreshTableData, dbLoading, dbErr, refreshDb, mode, inputValues} = useContext(EmployeeDbContext);
     const navigator = useNavigate();
 
     useEffect(()=>{
         refreshDb();
+    },[]);
+
+    useEffect(()=>{
+        refreshTableData();
     },[mode, inputValues]);
 
     return(
@@ -24,7 +28,13 @@ function EmployeesTable(){
                     <span className="text-xl">{dbErr}</span>
                 </h3>
             )}
-            {db && (
+            {dbErr == "" && tableData.length==0 && (
+                <h3 className="text-center opacity-75">
+                    <i className="fa-solid fa-triangle-exclamation text-xl mr-3"></i>
+                    <span className="text-xl">No Employee found</span>
+                </h3>
+            )}
+            {tableData.length != 0 && (
                 <table className="container rounded-md overflow-hidden">
                     <thead>
                         <tr className="border-b-2 border-cyan-900 bg-cyan-950/40">
@@ -43,7 +53,7 @@ function EmployeesTable(){
                         </tr>
                     </thead>
                     <tbody>
-                        {db.map(employeeObj => (
+                        {tableData.map(employeeObj => (
                             <tr 
                                 key={employeeObj.id}
                                 className="border-t-1 border-cyan-900/50 cursor-pointer hover:bg-cyan-700/25 active:bg-cyan-700/50"

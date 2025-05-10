@@ -19,7 +19,7 @@ function App() {
           <EmployeesTable/>
         </div>
         <div className='container w-4/12'>
-          <Suspense fallback={FallbackComponent}>
+          <Suspense fallback={<FallbackComponent/>}>
             <Routes>
               <Route path='/' element={<AddButton/>}></Route>
               <Route path='/add-employee' element={<AddOrUpdateComp/>}></Route>

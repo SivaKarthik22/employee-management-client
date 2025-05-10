@@ -41,7 +41,7 @@ function AddOrUpdateComp() {
         if(id){
             fetchEmployeeById(id)
             .then((response)=>{
-                console.log(response.data);
+                //console.log(response.data);
                 setInputValues( createInputValuesObj(response.data) );
             })
             .catch(console.log);
@@ -73,7 +73,7 @@ function AddOrUpdateComp() {
         if(id){
             updateEmployeeInDb(id, inputValues)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 setStatus("success");
             })
             .catch(err =>{
@@ -84,7 +84,7 @@ function AddOrUpdateComp() {
         else{
             createEmployeeInDb(inputValues)
             .then(response => {
-                console.log(response.data);
+                //console.log(response.data);
                 setStatus("success");
             })
             .catch(err =>{
