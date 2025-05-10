@@ -28,7 +28,7 @@ function EmployeesTable(){
                     <span className="text-xl">{dbErr}</span>
                 </h3>
             )}
-            {dbErr == "" && tableData.length==0 && (
+            {!dbLoading && dbErr == "" && tableData.length==0 && (
                 <h3 className="text-center opacity-75">
                     <i className="fa-solid fa-triangle-exclamation text-xl mr-3"></i>
                     <span className="text-xl">No Employee found</span>
